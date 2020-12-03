@@ -19,20 +19,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ConversationsActivity" />
         </activity>
-        <activity android:name=".registerlogin.NewUserActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".registerlogin.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".registerlogin.NewUserActivity"/>
+        <activity android:name=".registerlogin.LoginActivity"/>
         <activity android:name=".ConversationsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -4,10 +4,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.mattgarrett.pfg702_messenger.ConversationsActivity.Companion.currentUser
 import com.mattgarrett.pfg702_messenger.dataclass.ChatMessageData
 import com.mattgarrett.pfg702_messenger.dataclass.UserData
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -18,26 +23,68 @@ import kotlinx.android.synthetic.main.chat_to_row.view.*
 private const val TAG = "ChatLogActivity"
 
 class ChatLogActivity : AppCompatActivity() {
+
+    val adapter = GroupAdapter<GroupieViewHolder>()
+    var toUser: UserData? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
 
-        val user = intent.getParcelableExtra<UserData>(NewMessageActivity.USER_KEY)
-        val first = user.firstName
-        val last = user.lastName
+        RV_message_chat_log.adapter = adapter
+
+        toUser = intent.getParcelableExtra(NewMessageActivity.USER_KEY)
+        val first = toUser?.firstName
+        val last = toUser?.lastName
         if (first != null && last != null) {
             val username = "${first!!.capitalize()} ${last!!.capitalize()}"
             supportActionBar?.title = username
         } else {
-            supportActionBar?.title = "Chat Log"
+            supportActionBar?.title = "Message Log"
         }
-
-        getDummyData()
+        listenForMessages()
 
         btn_send_message_chat_log.setOnClickListener {
             Log.d(TAG,"Attempting to send message..")
             postMessageFlow()
         }
+    }
+
+    private fun listenForMessages() {
+        val dbRef = "MESSAGES"
+        val database = Firebase.database.getReference(dbRef)
+        database.addChildEventListener(object: ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val chatMessage = snapshot.getValue(ChatMessageData::class.java)
+                if (chatMessage != null) {
+                    Log.d(TAG, chatMessage.text)
+                    if (chatMessage.fromId == Firebase.auth.uid){
+                        val currentUser = ConversationsActivity.currentUser ?: return
+                        adapter.add(ChatToSomeoneItem(chatMessage.text,currentUser!!)) }
+                    else{
+                        adapter.add(ChatFromSomeoneItem(chatMessage.text,toUser!!))
+                        }
+
+
+                }
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+
+        })
+
+
     }
 
     private fun postMessageFlow() {
@@ -62,27 +109,16 @@ class ChatLogActivity : AppCompatActivity() {
 
     }
 
-    private fun getDummyData() {
-        val adapter = GroupAdapter<GroupieViewHolder>()
-        adapter.add(ChatFromItem("From Message ....."))
-        adapter.add(ChatToItem("To message\nto message"))
-        adapter.add(ChatFromItem("From Message ....."))
-        adapter.add(ChatToItem("To message\nto message"))
-        adapter.add(ChatFromItem("From Message ....."))
-        adapter.add(ChatToItem("To message\nto message"))
-        adapter.add(ChatFromItem("From Message ....."))
-        adapter.add(ChatToItem("To message\nto message"))
-        adapter.add(ChatFromItem("From Message ....."))
-        adapter.add(ChatToItem("To message\nto message"))
 
-        RV_message_chat_log.adapter = adapter
-
-    }
 }
 
-class ChatFromItem(val text: String): Item<GroupieViewHolder>() {
+class ChatFromSomeoneItem(val text: String?, val userData: UserData): Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.tv_chat_from_row.text = text
+
+        val pictureUri = userData.profileImageURL
+        val targetImageView = viewHolder.itemView.iv_chat_from_row
+        Picasso.get().load(pictureUri).into(targetImageView)
     }
 
     override fun getLayout(): Int {
@@ -91,9 +127,13 @@ class ChatFromItem(val text: String): Item<GroupieViewHolder>() {
 
 
 }
-class ChatToItem(val text: String): Item<GroupieViewHolder>() {
+class ChatToSomeoneItem(val text: String?, val userData: UserData): Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.tv_chat_to_row.text = text
+
+        val pictureUri = userData.profileImageURL
+        val targetImageView = viewHolder.itemView.iv_chat_to_row
+        Picasso.get().load(pictureUri).into(targetImageView)
     }
 
     override fun getLayout(): Int {
