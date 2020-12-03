@@ -9,7 +9,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.mattgarrett.pfg702_messenger.ConversationsActivity.Companion.currentUser
 import com.mattgarrett.pfg702_messenger.dataclass.ChatMessageData
 import com.mattgarrett.pfg702_messenger.dataclass.UserData
 import com.squareup.picasso.Picasso
@@ -51,14 +50,16 @@ class ChatLogActivity : AppCompatActivity() {
     }
 
     private fun listenForMessages() {
-        val dbRef = "MESSAGES"
+        val toUserId = toUser?.uid
+        val fromUserId = Firebase.auth.uid
+        val dbRef = "USER-MESSAGES/$fromUserId/$toUserId"
         val database = Firebase.database.getReference(dbRef)
         database.addChildEventListener(object: ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val chatMessage = snapshot.getValue(ChatMessageData::class.java)
                 if (chatMessage != null) {
                     Log.d(TAG, chatMessage.text)
-                    if (chatMessage.fromId == Firebase.auth.uid){
+                    if (chatMessage.fromId == fromUserId){
                         val currentUser = ConversationsActivity.currentUser ?: return
                         adapter.add(ChatToSomeoneItem(chatMessage.text,currentUser!!)) }
                     else{
@@ -71,44 +72,39 @@ class ChatLogActivity : AppCompatActivity() {
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
             }
-
             override fun onChildRemoved(snapshot: DataSnapshot) {
             }
-
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
             }
-
             override fun onCancelled(error: DatabaseError) {
             }
-
-
         })
 
 
     }
 
     private fun postMessageFlow() {
-        val toUserInfo = intent.getParcelableExtra<UserData>(NewMessageActivity.USER_KEY)
-        val fromUser = Firebase.auth.uid
-        val toUser = toUserInfo.uid
-        val dbRef = "MESSAGES"
-        val database = Firebase.database.getReference(dbRef).push()
-        val messageUid = database.key
+        val fromUserId = Firebase.auth.uid
+        val toUserId = toUser?.uid
+        val fromDbRef = "USER-MESSAGES/$fromUserId/$toUserId"
+        val toDbRef = "USER-MESSAGES/$toUserId/$fromUserId"
+        val fromDatabase = Firebase.database.getReference(fromDbRef).push()
+        val toDatabase = Firebase.database.getReference(toDbRef).push()
+        val messageUid = toDatabase.key
         val text = et_enter_message_chat_log.text.toString()
 
-        val chatMessage = ChatMessageData(messageUid,text,fromUser,toUser,System.currentTimeMillis())
-        database.setValue(chatMessage)
+        val chatMessage = ChatMessageData(messageUid,text,fromUserId,toUserId,System.currentTimeMillis())
+        fromDatabase.setValue(chatMessage)
             .addOnSuccessListener {
-                Log.d(TAG,"Success: Saved our chat message ${database.key}")
+                Log.d(TAG,"Success: Saved our chat message ${toDatabase.key}")
+                et_enter_message_chat_log.text.clear()
+                RV_message_chat_log.scrollToPosition(adapter.itemCount -1)
             }
             .addOnFailureListener {
                 Log.d(TAG,"Failure: ${it.message}")
             }
-
-
-
+        toDatabase.setValue(chatMessage)
     }
-
 
 }
 
