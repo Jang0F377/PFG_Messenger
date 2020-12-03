@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">PFG702_Messenger</string>
+    <string name="app_logo">Prefire Gaming Messenger</string>
+    <string name="prefire">Prefire</string>
+    <string name="gaming">Gaming</string>
+    <string name="messenger">Messenger</string>
+    <string name="placeholder">PlaceHolder</string>
+    <string name="et_login_page_username">Email</string>
+    <string name="et_login_page_password">Password</string>
+    <string name="btn_login_page_login">Login</string>
+    <string name="btn_login_page_register">Register</string>
+    <string name="btn_login_page_add_your_photo">Add your photo</string>
+    <string name="et_registration_page_first_name">First Name</string>
+    <string name="et_registration_page_last_name">Last Name</string>
+    <string name="et_registration_page_email">Email</string>
+    <string name="et_registration_page_password">Password</string>
+    <string name="et_registration_page_confirm_password">Confirm Password</string>
+    <string name="btn_registration_page_create_my_account">Create My Account</string>
+    <string name="tv_already_have_an_account">Already have an account? Press Here</string>
+    <string name="login_page_welcome">Welcome</string>
+    <string name="login_page_back">Back</string>
+    <string name="login_page_please_log_in">Please Log-In</string>
+    <string name="tv_login_page_create_an_account">I NEED TO CREATE AN ACCOUNT!</string>
+    <string name="enter_message_here">Enter Message</string>
+</resources>

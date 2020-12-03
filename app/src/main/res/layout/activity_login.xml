@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dodgerSilver"
+    tools:context=".registerlogin.LoginActivity">
+
+
+    
+    <LinearLayout
+        android:id="@+id/LL_activity_login"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+        <TextView
+            android:id="@+id/tv_login_page_prefire"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/audiowide"
+            android:text="@string/prefire"
+            android:textAlignment="gravity"
+            android:textColor="@color/dodgerBlue"
+            android:textSize="45sp"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:id="@+id/login_page_gaming"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/audiowide"
+            android:text="@string/gaming"
+            android:textSize="45sp"
+            android:textStyle="bold"
+            android:textColor="@color/dodgerBlue"/>
+        <TextView
+            android:id="@+id/login_page_messenger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/audiowide"
+            android:text="@string/messenger"
+            android:textSize="45sp"
+            android:textColor="@color/dodgerBlue"
+            android:textStyle="bold"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/LL_activity_login_welcome_back"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/LL_activity_login"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:alpha="0"
+        >
+
+        <TextView
+            android:id="@+id/login_page_welcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_page_welcome"
+            android:textSize="65sp"
+            android:fontFamily="@font/audiowide"
+            android:textColor="@color/dodgerBlue"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/login_page_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_page_back"
+            android:textSize="65sp"
+            android:fontFamily="@font/audiowide"
+            android:textColor="@color/dodgerBlue"
+            android:textStyle="bold"/>
+
+
+    </LinearLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/CL_activity_login_bottom_login"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/LL_activity_login"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/CL_login_page_email_specific"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="90dp">
+
+            <ImageView
+                android:id="@+id/iv_login_page_email"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:src="@android:drawable/ic_dialog_email"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="25dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+            <EditText
+                android:id="@+id/et_login_page_email"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintLeft_toRightOf="@id/iv_login_page_email"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:hint="@string/et_login_page_username"
+                android:inputType="textEmailAddress"
+                android:gravity="bottom|center_vertical"
+                android:textSize="24sp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="17dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/CL_login_page_password_specific"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/CL_login_page_email_specific"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_login_page_password"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:src="@android:drawable/ic_lock_idle_lock"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"/>
+            <EditText
+                android:id="@+id/et_login_page_password"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintLeft_toRightOf="@id/iv_login_page_password"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:inputType="textPassword"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="17dp"
+                android:hint="@string/et_login_page_password"
+                android:textSize="24sp"
+                android:gravity="bottom|center_vertical"
+                android:textColorHint="#FFFFFF"
+                android:textColor="#FFFFFF"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <TextView
+            android:id="@+id/tv_login_page_please_login"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="11dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/CL_login_page_email_specific"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:text="@string/login_page_please_log_in"
+            android:textSize="40sp"
+            android:gravity="center"
+            android:textColor="@color/dodgerBlue"
+            android:fontFamily="@font/audiowide"
+            android:textStyle="bold"
+            />
+
+        <Button
+            android:id="@+id/btn_login_page_button"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            app:layout_constraintTop_toBottomOf="@id/CL_login_page_password_specific"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="@string/btn_login_page_login"
+            android:layout_marginTop="20dp"
+            android:textSize="17sp"/>
+
+        <TextView
+            android:id="@+id/tv_login_page_i_need_to_create_account"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/btn_login_page_button"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="@string/tv_login_page_create_an_account"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:gravity="center"
+            android:textColor="#000000"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

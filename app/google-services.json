@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "253031354809",
+    "firebase_url": "https://pfg702-messenger.firebaseio.com",
+    "project_id": "pfg702-messenger",
+    "storage_bucket": "pfg702-messenger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:253031354809:android:4d6b802f9444cf06f8e668",
+        "android_client_info": {
+          "package_name": "com.mattgarrett.pfg702_messenger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "253031354809-rcngbndup9m7aqppkerneuprnoqk5n63.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBKllxRsGbrAfe1XkzjR-2EGbGLBkJDxc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "253031354809-rcngbndup9m7aqppkerneuprnoqk5n63.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
