@@ -14,6 +14,10 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.mattgarrett.pfg702_messenger.registerlogin.NewUserActivity
 import com.mattgarrett.pfg702_messenger.dataclass.UserData
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
+import com.xwray.groupie.Item
+import kotlinx.android.synthetic.main.activity_conversations.*
 
 
 private const val TAG = "ConversationsActivity"
@@ -30,9 +34,22 @@ class ConversationsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_conversations)
         supportActionBar?.title = "My Conversations"
 
+        setupDummyRows()
+
 
         fetchUsers()
         checkIfUserIsLoggedIn()
+
+    }
+
+    private fun setupDummyRows() {
+        val adapter = GroupAdapter<GroupieViewHolder>()
+
+        adapter.add(LatestMessageRow())
+        adapter.add(LatestMessageRow())
+        adapter.add(LatestMessageRow())
+
+        RV_main_conversations_activity.adapter = adapter
 
     }
 
@@ -89,6 +106,15 @@ class ConversationsActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.nav_menu,menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+}
+class LatestMessageRow: Item<GroupieViewHolder>() {
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.conversations_activity_row
     }
 
 }

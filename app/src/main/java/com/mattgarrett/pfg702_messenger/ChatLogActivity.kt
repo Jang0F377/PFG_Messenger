@@ -84,12 +84,17 @@ class ChatLogActivity : AppCompatActivity() {
     }
 
     private fun postMessageFlow() {
+        val fbDatabase = Firebase.database
         val fromUserId = Firebase.auth.uid
         val toUserId = toUser?.uid
         val fromDbRef = "USER-MESSAGES/$fromUserId/$toUserId"
         val toDbRef = "USER-MESSAGES/$toUserId/$fromUserId"
-        val fromDatabase = Firebase.database.getReference(fromDbRef).push()
-        val toDatabase = Firebase.database.getReference(toDbRef).push()
+        val latestFromMessageRef = "LATEST-MESSAGES/$fromUserId/$toUserId"
+        val latestToMessageRef = "LATEST-MESSAGES/$toUserId/$fromUserId"
+        val fromDatabase = fbDatabase.getReference(fromDbRef).push()
+        val toDatabase = fbDatabase.getReference(toDbRef).push()
+        val latestFromDatabase = fbDatabase.getReference(latestFromMessageRef)
+        val latestToDatabase = fbDatabase.getReference(latestToMessageRef)
         val messageUid = toDatabase.key
         val text = et_enter_message_chat_log.text.toString()
 
@@ -104,6 +109,8 @@ class ChatLogActivity : AppCompatActivity() {
                 Log.d(TAG,"Failure: ${it.message}")
             }
         toDatabase.setValue(chatMessage)
+        latestFromDatabase.setValue(chatMessage)
+        latestToDatabase.setValue(chatMessage)
     }
 
 }
