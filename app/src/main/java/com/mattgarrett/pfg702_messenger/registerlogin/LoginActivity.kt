@@ -21,7 +21,6 @@ import java.sql.Time
 private const val TAG = "LoginActivity"
 
 class LoginActivity : AppCompatActivity() {
-    lateinit var welcomeBack: LinearLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
