@@ -29,14 +29,15 @@ class ChatLogActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
-
         RV_message_chat_log.adapter = adapter
+
+
 
         toUser = intent.getParcelableExtra(NewMessageActivity.USER_KEY)
         val first = toUser?.firstName
         val last = toUser?.lastName
         if (first != null && last != null) {
-            val username = "${first!!.capitalize()} ${last!!.capitalize()}"
+            val username = "${first.capitalize()} ${last.capitalize()}"
             supportActionBar?.title = username
         } else {
             supportActionBar?.title = "Message Log"
@@ -65,9 +66,8 @@ class ChatLogActivity : AppCompatActivity() {
                     else{
                         adapter.add(ChatFromSomeoneItem(chatMessage.text,toUser!!))
                         }
-
-
                 }
+                RV_message_chat_log.scrollToPosition(adapter.itemCount -1)
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {

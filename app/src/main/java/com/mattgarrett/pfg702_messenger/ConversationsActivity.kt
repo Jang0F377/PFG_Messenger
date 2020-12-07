@@ -6,18 +6,23 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.mattgarrett.pfg702_messenger.dataclass.ChatMessageData
 import com.mattgarrett.pfg702_messenger.registerlogin.NewUserActivity
 import com.mattgarrett.pfg702_messenger.dataclass.UserData
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_conversations.*
+import kotlinx.android.synthetic.main.conversations_activity_row.view.*
 
 
 private const val TAG = "ConversationsActivity"
@@ -33,25 +38,72 @@ class ConversationsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_conversations)
         supportActionBar?.title = "My Conversations"
+        RV_main_conversations_activity.adapter = adapter
+        RV_main_conversations_activity.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
-        setupDummyRows()
+        adapter.setOnItemClickListener { item, view ->
 
+            Log.d(TAG,"")
+            val intent = Intent(this, ChatLogActivity::class.java)
+            val row = item as LatestMessageRow
+            val rowNumber = row.chatPartnerUser
+            intent.putExtra(NewMessageActivity.USER_KEY, rowNumber)
+            startActivity(intent)
+
+        }
+
+
+        listenForMessages()
 
         fetchUsers()
         checkIfUserIsLoggedIn()
 
     }
+    val latestMessagesMap = HashMap<String, ChatMessageData>()
 
-    private fun setupDummyRows() {
-        val adapter = GroupAdapter<GroupieViewHolder>()
-
-        adapter.add(LatestMessageRow())
-        adapter.add(LatestMessageRow())
-        adapter.add(LatestMessageRow())
-
-        RV_main_conversations_activity.adapter = adapter
+    private fun refreshConversationsActivityRView() {
+        adapter.clear()
+        latestMessagesMap.values.forEach {
+            adapter.add(LatestMessageRow(it))
+        }
 
     }
+
+    private fun listenForMessages(){
+        val fromId = Firebase.auth.uid
+        val dbRef = "LATEST-MESSAGES/$fromId"
+        val fbDatabase = Firebase.database.getReference(dbRef)
+        fbDatabase.addChildEventListener(object: ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val chatMessage = snapshot.getValue(ChatMessageData::class.java) ?: return
+                latestMessagesMap[snapshot.key!!] = chatMessage
+                refreshConversationsActivityRView()
+
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                val chatMessage = snapshot.getValue(ChatMessageData::class.java) ?: return
+                latestMessagesMap[snapshot.key!!] = chatMessage
+                refreshConversationsActivityRView()
+
+
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+
+            }
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+
+            }
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+
+    }
+    val adapter = GroupAdapter<GroupieViewHolder>()
+
+
 
     private fun fetchUsers() {
         val uid = Firebase.auth.uid
@@ -107,14 +159,5 @@ class ConversationsActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.nav_menu,menu)
         return super.onCreateOptionsMenu(menu)
     }
-
 }
-class LatestMessageRow: Item<GroupieViewHolder>() {
-    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-    }
 
-    override fun getLayout(): Int {
-        return R.layout.conversations_activity_row
-    }
-
-}
